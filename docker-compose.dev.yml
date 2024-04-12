@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+  my-expenses_ui:
+    container_name: my-expenses_ui-react
+    image: 'my-expenses_ui-react:dev'
+    build:
+      context: ../my-expenses_ui-react
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    env_file:
+      - ../my-expenses_ui-react/config/.env
+    volumes:
+      - ../my-expenses_ui-react/my-expenses-ui:/app/my-expenses-ui
+    networks:
+      - frontend
+
+  my-expenses_inventory-api:
+    container_name: my-expenses_inventory-api
+    image: 'my-expenses_inventory-api:dev'
+    build:
+      context: ../my-expenses_inventory
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8080:80'
+    env_file:
+      - ../my-expenses_inventory/config/.env
+    volumes:
+      - ../my-expenses_inventory/src:/var/www
+    networks:
+      - backend
+      - my-expenses_local-data-stores_default
+
+  my-expenses_products-api:
+    container_name: my-expenses_products-api
+    image: 'my-expenses_products-api:dev'
+    build:
+      context: ../my-expenses_products
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8081:8000'
+    env_file:
+      - ../my-expenses_products/config/.env
+    volumes:
+      - ../my-expenses_products/src:/app/products
+    networks:
+      - my-expenses_local-data-stores_default
+
+  my-expenses_receipts-api:
+    container_name: my-expenses_receipts-api
+    image: 'my-expenses_receipts-api:dev'
+    build:
+      context: ../my-expenses_receipts
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8082:8080'
+    env_file:
+      - ../my-expenses_receipts/config/.env
+    volumes:
+      - ../my-expenses_receipts/receipts-api:/app/receipts
+      - ../my-expenses_receipts/dependencies/registry:/usr/local/cargo/registry
+    networks:
+      - my-expenses_local-data-stores_default
+
+  my-expenses_stores-api:
+    container_name: my-expenses_stores-api
+    image: 'my-expenses_stores-api:dev'
+    build:
+      context: ../my-expenses_stores
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8083:8080'
+    env_file:
+      - ../my-expenses_stores/config/.env
+    volumes:
+      - ../my-expenses_stores/stores:/app/stores
+      - ../my-expenses_stores/dependencies/.m2:/root/.m2
+    networks:
+      - my-expenses_local-data-stores_default
+
+  my-expenses_users-api:
+    container_name: my-expenses_users-api
+    image: 'my-expenses_users-api:dev'
+    build:
+      context: ../my-expenses_users
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8084:8000'
+    env_file:
+      - ../my-expenses_users/config/.env
+    volumes:
+      - ../my-expenses_users/src:/app/users
+      - ../my-expenses_users/dependencies/go/pkg:/go/pkg
+    networks:
+      - my-expenses_local-data-stores_default
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+  my-expenses_local-data-stores_default:
+    external: true
