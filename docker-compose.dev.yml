@@ -39,11 +39,12 @@ services:
       context: ../my-expenses_products
       dockerfile: Dockerfile.dev
     ports:
-      - '8081:8000'
+      - '8081:8080'
     env_file:
       - ../my-expenses_products/config/.env
     volumes:
-      - ../my-expenses_products/src:/app/products
+      - ../my-expenses_products/products:/app/products
+      - ../my-expenses_products/dependencies/.m2:/root/.m2
     networks:
       - my-expenses_local-data-stores_default
 
@@ -58,8 +59,7 @@ services:
     env_file:
       - ../my-expenses_receipts/config/.env
     volumes:
-      - ../my-expenses_receipts/receipts-api:/app/receipts
-      - ../my-expenses_receipts/dependencies/registry:/usr/local/cargo/registry
+      - ../my-expenses_receipts/src:/app/receipts
     networks:
       - my-expenses_local-data-stores_default
 
@@ -74,8 +74,8 @@ services:
     env_file:
       - ../my-expenses_stores/config/.env
     volumes:
-      - ../my-expenses_stores/stores:/app/stores
-      - ../my-expenses_stores/dependencies/.m2:/root/.m2
+      - ../my-expenses_stores/stores-api:/app/stores
+      - ../my-expenses_stores/dependencies/registry:/usr/local/cargo/registry
     networks:
       - my-expenses_local-data-stores_default
 

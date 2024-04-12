@@ -21,3 +21,5 @@ local app containers don't have port mapping for apis because we want to access 
 insteresting links
 
 * [communication-between-multiple-docker-compose-projects](https://stackoverflow.com/questions/38088279/communication-between-multiple-docker-compose-projects)
+
+pending to fix repo names in github
