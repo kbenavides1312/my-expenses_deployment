@@ -86,7 +86,7 @@ services:
       context: ../my-expenses_users
       dockerfile: Dockerfile.dev
     ports:
-      - '8084:8000'
+      - '8084:8080'
     env_file:
       - ../my-expenses_users/config/.env
     volumes:
